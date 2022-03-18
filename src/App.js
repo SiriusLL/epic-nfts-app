@@ -43,7 +43,7 @@ const App = () => {
       const account = accounts[0];
       console.log("Found an authorized account: ", account);
       setCurrentAccount(account);
-
+      getTokensMinted();
       eventListener();
     } else {
       console.log("No authorized account found");
@@ -74,7 +74,7 @@ const App = () => {
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
-
+      getTokensMinted();
       eventListener();
     } catch (error) {
       console.log(error);
@@ -261,25 +261,31 @@ const App = () => {
         </div>
         <div className="footer-container">
           <div>
-          <button
-            className="cta-button opensea-button"
-            onClick={() =>
-              window.open(
-                "https://testnets.opensea.io/collection/starnft-oiiksmtuel",
-                "_blank"
-              )
-            }
-          >
-            See the Collection
-          </button></div>
-          <div className='tweet'>
-          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
-          <a
-            className="footer-text"
-            href={TWITTER_LINK}
-            target="_blank"
-            rel="noreferrer"
-          >{`built on @${TWITTER_HANDLE}`}</a></div>
+            <button
+              className="cta-button opensea-button"
+              onClick={() =>
+                window.open(
+                  "https://testnets.opensea.io/collection/starnft-oiiksmtuel",
+                  "_blank"
+                )
+              }
+            >
+              See the Collection
+            </button>
+          </div>
+          <div className="tweet">
+            <img
+              alt="Twitter Logo"
+              className="twitter-logo"
+              src={twitterLogo}
+            />
+            <a
+              className="footer-text"
+              href={TWITTER_LINK}
+              target="_blank"
+              rel="noreferrer"
+            >{`built on @${TWITTER_HANDLE}`}</a>
+          </div>
         </div>
       </div>
     </div>
