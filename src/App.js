@@ -14,7 +14,7 @@ const TOTAL_MINT_COUNT = 50;
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
-  const [tokensMinted, setTokensMinted] = useState("");
+  const [tokensMinted, setTokensMinted] = useState({});
   const [isMining, setIsMining] = useState(false);
 
   const isWalletConnected = async () => {
@@ -103,10 +103,11 @@ const App = () => {
 
   useEffect(() => {
     isWalletConnected();
+    getTokensMinted();
   }, []);
 
   const getTokensMinted = async () => {
-    const CONTRACT_ADDRESS = "0x90BE7ABbe65A13624200EEcCE504BBB7947Be622";
+    const CONTRACT_ADDRESS = "0x8F9c193aB2f8E775DbC0892AC23369133DBA22bd";
 
     try {
       const { ethereum } = window;
@@ -126,9 +127,14 @@ const App = () => {
         // console.log("Mining...please wait.");
         // await remainingTxn.wait();
 
-        console.log(`Minted: ${remainingTxn[0]}/${remainingTxn[1]}`);
+        console.log(
+          `Minted: ${remainingTxn[0]}/${remainingTxn[1]}: ${remainingTxn[2]}`
+        );
 
-        setTokensMinted(`Minted: ${remainingTxn[0]}/${remainingTxn[1]}`);
+        setTokensMinted({
+          minted: `Minted: ${remainingTxn[0]}/${remainingTxn[1]}`,
+          soldOut: remainingTxn[2],
+        });
       } else {
         console.log("ethereum object doesn't exist!");
       }
@@ -136,9 +142,9 @@ const App = () => {
       console.log(error);
     }
   };
-  getTokensMinted();
+
   const mintNftFromContract = async () => {
-    const CONTRACT_ADDRESS = "0x90BE7ABbe65A13624200EEcCE504BBB7947Be622";
+    const CONTRACT_ADDRESS = "0x8F9c193aB2f8E775DbC0892AC23369133DBA22bd";
 
     try {
       const { ethereum } = window;
@@ -153,12 +159,14 @@ const App = () => {
         );
 
         console.log("Get ready to break your bank paying gas fees");
-        setIsMining(true);
         let nftTxn = await connectedContract.mintEpicNFT();
+
+        setIsMining(true);
 
         console.log("Mining...please wait.");
         await nftTxn.wait();
         setIsMining(false);
+        getTokensMinted();
         console.log(
           `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
         );
@@ -166,8 +174,15 @@ const App = () => {
         console.log("ethereum object doesn't exist!");
       }
     } catch (error) {
-      console.log(error);
+      console.log(".mmmm", error);
     }
+  };
+
+  const soldout = () => {
+    if (tokensMinted.soldOut === "Sold Out!") {
+      return "soldout";
+    }
+    return "cta-button mint-button";
   };
 
   return (
@@ -191,12 +206,15 @@ const App = () => {
           ) : (
             <button
               onClick={mintNftFromContract}
-              className="cta-button connect-wallet-button"
+              className={soldout()}
+              disabled
             >
               Mint NFT
             </button>
           )}
-          <div className="mint-count">{tokensMinted}</div>
+          <div className="mint-count">
+            {tokensMinted.minted} {tokensMinted.soldOut}
+          </div>
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
