@@ -73,13 +73,24 @@
   color: white;
   font-size: 18px;
   font-weight: bold;
+  padding: 5px;
+  margin: 3px;
 }
 
 .footer-container {
   display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: center; */
+  padding-bottom: 30px;
+}
+
+.tweet {
+  display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 30px;
+  padding: 5px;
+  margin: 3px;
 }
 
 .twitter-logo {
